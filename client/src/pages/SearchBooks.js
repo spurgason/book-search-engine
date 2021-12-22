@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Jumbotron, Container, Col, Form, Button, Card, CardColumns } from 'react-bootstrap';
 
 import Auth from '../utils/auth';
-import { saveBook, searchGoogleBooks } from '../utils/API';
+import { searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 import { SAVE_BOOK } from '../utils/mutations';
 import { useMutation } from '@apollo/react-hooks';
@@ -19,9 +19,13 @@ const SearchBooks = () => {
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
   useEffect(() => {
-    return () => saveBookIds(savedBookIds);
+    return () => {
+      saveBookIds(savedBookIds);
+    }
   });
 
+  
+  
   // create method to search for books and set state on form submit
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -75,7 +79,8 @@ const SearchBooks = () => {
         },
       });
 
-      if (!response.ok) {
+      if (!response) {
+        console.log(response)
         throw new Error('something went wrong!');
       }
 

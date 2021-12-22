@@ -8,7 +8,7 @@ const resolvers = {
             if (context.user) {
                 const userData = await User.findOne({ _id: context.user._id })
                     .select('-__v -password')
-                    .populate(books)
+                    
 
                 return userData;
             }
@@ -25,7 +25,7 @@ const resolvers = {
             return { token, user };
         },
 
-        login: async (parent, args, { email, password }) => {
+        login: async (parent, { email, password }) => {
             const user = await User.findOne({ email })
 
             if (!user) {
@@ -42,29 +42,29 @@ const resolvers = {
             return { token, user };
         },
 
-        saveBook: async (parent, args, context) => {
+        saveBook: async (parent, {input}, context) => {
             if (context.user) {
 
-                const savedBook = await User.findByIdAndUpdate(
+                const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $push: { savedBook: input } },
+                    { $addToSet: { savedBook: input } },
                     { new: true }
                 );
 
-                return savedBook;
+                return updatedUser;
             }
             throw new AuthenticationError('Login to use this feature!');
         },
 
         removeBook: async (parent, { bookId }, context) => {
             if (context.user) {
-                const removedBook = await User.findOneAndUpdate(
+                const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $pull: { savedBook: { bookId } } },
+                    { $pull: { savedBooks: { bookId: bookId } } },
                     { new: true }
                 );
 
-                return removedBook
+                return updatedUser
             }
             throw new AuthenticationError('Login to use this feature!');
 
