@@ -1,4 +1,5 @@
 # Book Search Engine
+<img src='./client/src/assets/book-search-engine-example.png'/>
 
 ## Description
 This application is a MERN stack book search engine that utilizes Google's Books API. In this application users can create an account and save their favorite books or books they would like to read. Users can then access a page specifically catered to their selection and remove them at their own convenience.
